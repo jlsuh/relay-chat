@@ -5,13 +5,13 @@ void send_package(int userSocket, void* toSend, t_buffer* buffer) {
 }
 
 void send_str_msg(int socket, char* str) {
-	t_string msg;
-	msg.content = strdup(str);
-	msg.length = strlen(msg.content) + 1;
-	t_buffer* buffer = serialize_string(msg);
+    t_string msg;
+    msg.content = strdup(str);
+    msg.length = strlen(msg.content) + 1;
+    t_buffer* buffer = serialize_string(msg);
 
-	void* toSend = serialize_package(STRING, buffer);
-	send_package(socket, toSend, buffer);
+    void* toSend = serialize_package(STRING, buffer);
+    send_package(socket, toSend, buffer);
 
     free(buffer->stream);
     free(buffer);
@@ -55,16 +55,16 @@ t_buffer* serialize_chat_room(t_string roomName, uint32_t roomID) {
     return buffer;
 }
 
-void* serialize_package(uint8_t op_code, t_buffer* buffer) {
+void* serialize_package(uint8_t anOpCode, t_buffer* buffer) {
     t_package* package = malloc(sizeof(t_package));
 
-    package->op_code = op_code;
+    package->opCode = anOpCode;
     package->buffer = buffer;
 
     void* toSend = malloc(buffer->size + sizeof(uint8_t) + sizeof(uint32_t));
     int offset = 0;
 
-    memcpy(toSend + offset, &(package->op_code), sizeof(uint8_t));
+    memcpy(toSend + offset, &(package->opCode), sizeof(uint8_t));
     offset += sizeof(uint8_t);
     memcpy(toSend + offset, &(package->buffer->size), sizeof(uint32_t));
     offset += sizeof(uint32_t);
@@ -82,25 +82,25 @@ void* deserialize_package(int serverSocket, bool deserializeNext) {
     t_package* package = malloc(sizeof(t_package));
     package->buffer = malloc(sizeof(t_buffer));
 
-    recv(serverSocket, &(package->op_code), sizeof(uint8_t), 0);
+    recv(serverSocket, &(package->opCode), sizeof(uint8_t), 0);
     recv(serverSocket, &(package->buffer->size), sizeof(uint32_t), 0);
     package->buffer->stream = malloc(package->buffer->size);
     recv(serverSocket, package->buffer->stream, package->buffer->size, 0);
 
-    switch (package->op_code) {
+    void* deserialized = NULL;
+    switch (package->opCode) {
     case STRING:
-        void* msg = deserialize_string(package->buffer);
-        free(package);
-        return msg;
+        deserialized = deserialize_string(package->buffer);
+        break;
     case ROOMINFO:
-        void* room = deserialize_chat_room(package->buffer);
-        free(package);
-        return room;
+        deserialized = deserialize_chat_room(package->buffer);
+        break;
     default:
-        puts("Non valid OpCode\n");
+        puts("Non valid OpCode");
         break;
     }
-    return NULL;
+    free(package);
+    return deserialized;
 }
 
 t_chat_room* deserialize_chat_room(t_buffer* buffer) {
@@ -139,12 +139,12 @@ t_string* deserialize_string(t_buffer* buffer) {
 }
 
 t_config* get_cwd_config(char* configFileName) {
-	char* cwd = getcwd(NULL, 0);
+    char* cwd = getcwd(NULL, 0);
     printf("CWD: %s\n", cwd);
-	char* fullConfigPath = string_from_format("%s/%s", cwd, configFileName);
+    char* fullConfigPath = string_from_format("%s/%s", cwd, configFileName);
     printf("Full path: %s\n", fullConfigPath);
-	t_config* config = config_create(fullConfigPath);
-	free(cwd);
-	free(fullConfigPath);
-	return config;
+    t_config* config = config_create(fullConfigPath);
+    free(cwd);
+    free(fullConfigPath);
+    return config;
 }

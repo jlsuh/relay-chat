@@ -24,7 +24,7 @@ typedef struct {
 } t_buffer;
 
 typedef struct {
-    uint8_t op_code;
+    uint8_t opCode;
     t_buffer* buffer;
 } t_package;
 
