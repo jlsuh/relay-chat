@@ -1,15 +1,15 @@
 #include "user.h"
 
-#define SERVER_CONFIG_NAME "user.config"
-#define SERVER_IP "IP"
-#define SERVER_PORT "PORT"
+#define USER_CONFIG_NAME "user.config"
+#define USER_IP "IP"
+#define USER_PORT "PORT"
 
 bool deserializeNext = true;
 
 int main(int argc, char *argv[]) {
-	t_config* config = get_cwd_config(SERVER_CONFIG_NAME);
-	char* ip = config_get_string_value(config, SERVER_IP);
-	char* port = config_get_string_value(config, SERVER_PORT);
+	t_config* config = config_create(USER_CONFIG_NAME);
+	char* ip = config_get_string_value(config, USER_IP);
+	char* port = config_get_string_value(config, USER_PORT);
 
 	int serverSocket = connect_to_server(ip, port);
 
@@ -108,10 +108,10 @@ int connect_to_server(char *ip, char *port) {
 	struct addrinfo hints;
 	struct addrinfo *serverInfo;
 
-	memset(&hints, 0, sizeof(hints));
-	hints.ai_family = AF_UNSPEC;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_flags = AI_PASSIVE;
+	memset(&hints, 0, sizeof(hints)); // make sure the struct is empty
+	hints.ai_family = AF_UNSPEC; // don't care IPv4 or IPv6
+	hints.ai_socktype = SOCK_STREAM; // TCP stream sockets
+	hints.ai_flags = AI_PASSIVE; // fill in my IP for me
 
 	int rv = getaddrinfo(ip, port, &hints, &serverInfo);
 	if (rv != 0) {

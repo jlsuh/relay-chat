@@ -137,14 +137,3 @@ t_string* deserialize_string(t_buffer* buffer) {
 
     return msg;
 }
-
-t_config* get_cwd_config(char* configFileName) {
-    char* cwd = getcwd(NULL, 0);
-    printf("CWD: %s\n", cwd);
-    char* fullConfigPath = string_from_format("%s/%s", cwd, configFileName);
-    printf("Full path: %s\n", fullConfigPath);
-    t_config* config = config_create(fullConfigPath);
-    free(cwd);
-    free(fullConfigPath);
-    return config;
-}

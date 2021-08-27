@@ -7,11 +7,11 @@
 #include <errno.h>
 #include <pthread.h>
 #include <unistd.h>
-#include <netdb.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>
 #include <readline/readline.h>
+#include <netdb.h>
 
 typedef struct {
     char* content;
@@ -53,6 +53,5 @@ void* serialize_package(uint8_t op_code, t_buffer* buffer);
 void* deserialize_package(int serverSocket, bool deserializeNext);
 t_chat_room* deserialize_chat_room(t_buffer* buffer);
 t_string* deserialize_string(t_buffer* buffer);
-t_config* get_cwd_config(char* configFileName);
 
 #endif
