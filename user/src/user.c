@@ -1,6 +1,6 @@
 #include "user.h"
 
-#define USER_CONFIG_NAME "user.config"
+#define USER_CONFIG_NAME "cfg/user.config"
 #define USER_IP "IP"
 #define USER_PORT "PORT"
 

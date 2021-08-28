@@ -1,6 +1,6 @@
 #include "server.h"
 
-#define SERVER_CONFIG_NAME "server.config"
+#define SERVER_CONFIG_NAME "cfg/server.config"
 #define SERVER_IP "IP"
 #define SERVER_PORT "PORT"
 
