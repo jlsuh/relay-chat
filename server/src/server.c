@@ -1,6 +1,6 @@
 #include "server.h"
 
-#define SERVER_CONFIG_NAME "cfg/server.config"
+#define SERVER_CONFIG "cfg/server.config"
 #define SERVER_IP "IP"
 #define SERVER_PORT "PORT"
 
@@ -9,7 +9,7 @@ static uint32_t userID = 0;
 static uint32_t roomID = 0;
 
 int main(int argc, char* argv[]) {
-	t_config* config = config_create(SERVER_CONFIG_NAME);
+	t_config* config = config_create(SERVER_CONFIG);
 	char* ip = config_get_string_value(config, SERVER_IP);
 	char* port = config_get_string_value(config, SERVER_PORT);
 

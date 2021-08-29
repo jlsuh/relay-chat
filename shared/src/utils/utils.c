@@ -19,29 +19,30 @@ void send_str_msg(int socket, char* str) {
     free(toSend);
 }
 
-t_buffer* serialize_string(t_string msg) {
+t_buffer* create_buffer(size_t size, void* stream) {
     t_buffer* buffer = malloc(sizeof(t_buffer));
-    buffer->size = sizeof(uint32_t)
-                   + strlen(msg.content) + 1;
+    buffer->size = size;
+    buffer->stream = stream;
+    return buffer;
+}
 
-    void* stream = malloc(buffer->size);
+t_buffer* serialize_string(t_string msg) {
+    size_t size = sizeof(uint32_t) + strlen(msg.content) + 1;
+    void* stream = malloc(size);
     int offset = 0;
 
     memcpy(stream + offset, &msg.length, sizeof(uint32_t));
     offset += sizeof(uint32_t);
     memcpy(stream + offset, msg.content, strlen(msg.content) + 1);
 
-    buffer->stream = stream;
+    t_buffer* buffer = create_buffer(size, stream);
 
     return buffer;
 }
 
 t_buffer* serialize_chat_room(t_string roomName, uint32_t roomID) {
-    t_buffer* buffer = malloc(sizeof(t_buffer));
-    buffer->size = sizeof(uint32_t) * 2
-                   + strlen(roomName.content) + 1;
-    
-    void* stream = malloc(buffer->size);
+    size_t size = sizeof(uint32_t) * 2 + strlen(roomName.content) + 1;
+    void* stream = malloc(size);
     int offset = 0;
 
     memcpy(stream + offset, &roomID, sizeof(uint32_t));
@@ -50,7 +51,7 @@ t_buffer* serialize_chat_room(t_string roomName, uint32_t roomID) {
     offset += sizeof(uint32_t);
     memcpy(stream + offset, roomName.content, strlen(roomName.content) + 1);
 
-    buffer->stream = stream;
+    t_buffer* buffer = create_buffer(size, stream);
 
     return buffer;
 }

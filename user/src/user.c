@@ -1,13 +1,13 @@
 #include "user.h"
 
-#define USER_CONFIG_NAME "cfg/user.config"
+#define USER_CONFIG "cfg/user.config"
 #define USER_IP "IP"
 #define USER_PORT "PORT"
 
 bool deserializeNext = true;
 
 int main(int argc, char *argv[]) {
-	t_config* config = config_create(USER_CONFIG_NAME);
+	t_config* config = config_create(USER_CONFIG);
 	char* ip = config_get_string_value(config, USER_IP);
 	char* port = config_get_string_value(config, USER_PORT);
 
