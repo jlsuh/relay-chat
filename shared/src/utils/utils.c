@@ -5,9 +5,10 @@ void send_package(int userSocket, void* toSend, t_buffer* buffer) {
 }
 
 void send_str_msg(int socket, char* str) {
-    t_string msg;
-    msg.content = strdup(str);
-    msg.length = strlen(msg.content) + 1;
+    t_string msg = {
+        .content = strdup(str),
+        .length = strlen(msg.content) + 1
+    };
     t_buffer* buffer = serialize_string(msg);
 
     void* toSend = serialize_package(STRING, buffer);

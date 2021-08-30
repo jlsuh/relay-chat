@@ -217,10 +217,10 @@ int init_server(char *ip, char *port) {
 	struct addrinfo hints;
 	struct addrinfo *serverInfo;
 
-	memset(&hints, 0, sizeof(hints)); // make sure the struct is empty
-	hints.ai_family = AF_UNSPEC; // don't care IPv4 or IPv6
-	hints.ai_socktype = SOCK_STREAM; // TCP stream sockets
-	hints.ai_flags = AI_PASSIVE; // fill in my IP for me
+	memset(&hints, 0, sizeof(hints));	// make sure the struct is empty
+	hints.ai_family = AF_UNSPEC;		// don't care IPv4 or IPv6
+	hints.ai_socktype = SOCK_STREAM;	// TCP stream sockets
+	hints.ai_flags = AI_PASSIVE;		// fill in my IP for me
 
 	int rv = getaddrinfo(ip, port, &hints, &serverInfo);
 	if (rv != 0) {
