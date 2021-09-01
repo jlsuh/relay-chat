@@ -4,36 +4,45 @@ void send_package(int userSocket, void* toSend, t_buffer* buffer) {
     send(userSocket, toSend, buffer->size + sizeof(uint8_t) + sizeof(uint32_t), 0);
 }
 
+t_buffer* buffer_create() {
+    t_buffer* buffer = malloc(sizeof(t_buffer));
+    buffer->size = 0;
+    buffer->stream = NULL;
+    return buffer;
+}
+
+void buffer_pack(t_buffer* buffer, void* streamToAdd, int size) {
+    buffer->stream = realloc(buffer->stream, buffer->size + size);  // Allocate more memory than original
+	memcpy(buffer->stream + buffer->size, streamToAdd, size);       // Add new stream from last position
+	buffer->size += size;                                           // Update buffer size
+}
+
 void send_str_msg(int socket, char* str) {
-    t_buffer* buffer = serialize_string(str);
+    t_buffer* buffer = buffer_create();
+    buffer_pack_string(buffer, str);
 
     void* toSend = serialize_package(STRING, buffer);
     send_package(socket, toSend, buffer);
 
     free(buffer->stream);
     free(buffer);
-    // free(msg.content);
     free(toSend);
 }
 
-t_buffer* create_buffer(size_t size, void* stream) {
-    t_buffer* buffer = malloc(sizeof(t_buffer));
-    buffer->size = size;
-    buffer->stream = stream;
-    return buffer;
-}
+void* buffer_pack_string(t_buffer* buffer, char* stringToAdd) {
+    uint32_t length = strlen(stringToAdd) + 1;
+    buffer_pack(buffer, &length, sizeof(length));
 
-t_buffer* serialize_string(char* msg) {
-    uint32_t length = strlen(msg) + 1;
-    size_t size = sizeof(uint32_t) + length;
-    void* stream = malloc(size);
-    int offset = 0;
+    buffer->stream = realloc(buffer->stream, buffer->size + length);
+	memcpy(buffer->stream + buffer->size, stringToAdd, length);
+	buffer->size += length;
+    // size_t size = sizeof(uint32_t) + length;
+    // void* stream = malloc(size);
+    // int offset = 0;
 
-    memcpy(stream + offset, &length, sizeof(uint32_t));
-    offset += sizeof(uint32_t);
-    memcpy(stream + offset, msg, length);
-
-    t_buffer* buffer = create_buffer(size, stream);
+    // memcpy(stream + offset, &length, sizeof(uint32_t));
+    // offset += sizeof(uint32_t);
+    // memcpy(stream + offset, stringToAdd, length);
 
     return buffer;
 }

@@ -51,7 +51,6 @@ void recv_distributed_msg(void* socket) {
 			break;
 		} else {
 			printf("%s", msg);
-			// free(msg->content);
 			free(msg);
 		}
 	} while(1);
@@ -61,7 +60,6 @@ void recv_distributed_msg(void* socket) {
 void display_deserialized_msg(int serverSocket) {
 	char* msg = (char*)deserialize_package(serverSocket, true);
 	printf("%s", msg);
-	// free(msg->content);
 	free(msg);
 }
 
@@ -69,7 +67,9 @@ void send_user_info(int serverSocket) {
 	char* str;
 	str = malloc(sizeof(char) * 32);
 	scanf("%s", str);
-	t_buffer* buffer = serialize_string(str);
+	t_buffer* buffer = buffer_create();
+
+	buffer_pack_string(buffer, str);
 
 	send_serialized_package(serverSocket, buffer, STRING, str);
 }
