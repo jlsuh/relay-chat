@@ -47,19 +47,20 @@ void* buffer_pack_string(t_buffer* buffer, char* stringToAdd) {
     return buffer;
 }
 
-t_buffer* serialize_chat_room(char* roomName, uint32_t roomID) {
-    uint32_t length = strlen(roomName) + 1;
-    size_t size = sizeof(uint32_t) * 2 + length;
-    void* stream = malloc(size);
-    int offset = 0;
+void* buffer_pack_chat_room(t_buffer* buffer, char* roomName, uint32_t roomID) {
+    buffer_pack(buffer, &roomID, sizeof(roomID));
+    buffer_pack_string(buffer, roomName);
 
-    memcpy(stream + offset, &roomID, sizeof(uint32_t));
-    offset += sizeof(uint32_t);
-    memcpy(stream + offset, &length, sizeof(uint32_t));
-    offset += sizeof(uint32_t);
-    memcpy(stream + offset, roomName, length);
+    // uint32_t length = strlen(roomName) + 1;
+    // size_t size = sizeof(uint32_t) * 2 + length;
+    // void* stream = malloc(size);
+    // int offset = 0;
 
-    t_buffer* buffer = create_buffer(size, stream);
+    // memcpy(stream + offset, &roomID, sizeof(uint32_t));
+    // offset += sizeof(uint32_t);
+    // memcpy(stream + offset, &length, sizeof(uint32_t));
+    // offset += sizeof(uint32_t);
+    // memcpy(stream + offset, roomName, length);
 
     return buffer;
 }

@@ -79,7 +79,9 @@ void send_room_info(int serverSocket) {
 	uint32_t roomID;
 	roomName = malloc(sizeof(char) * 32);
 	scanf("%s %d", roomName, &roomID);
-	t_buffer* buffer = serialize_chat_room(roomName, roomID);
+	t_buffer* buffer = buffer_create();
+
+	buffer_pack_chat_room(buffer, roomName, roomID);
 
 	send_serialized_package(serverSocket, buffer, ROOMINFO, roomName);
 }
