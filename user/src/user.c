@@ -68,9 +68,7 @@ void send_user_info(int serverSocket) {
 	userName = malloc(sizeof(char) * 32);
 	scanf("%s", userName);
 	t_buffer* buffer = buffer_create();
-
 	buffer_pack_string(buffer, userName);
-
 	send_serialized_package(serverSocket, buffer, STRING, userName);
 }
 
@@ -80,9 +78,7 @@ void send_room_info(int serverSocket) {
 	roomName = malloc(sizeof(char) * 32);
 	scanf("%s %d", roomName, &roomID);
 	t_buffer* buffer = buffer_create();
-
-	buffer_pack_chat_room(buffer, roomName, roomID);
-
+	buffer_pack_chat_room(buffer, roomID, roomName);
 	send_serialized_package(serverSocket, buffer, ROOMINFO, roomName);
 }
 
@@ -98,8 +94,7 @@ void exchange_info(int serverSocket, void(*info_sender)(int)) {
 }
 
 void free_sended_info(t_buffer* buffer, void* toSend, char* str) {
-    free(buffer->stream);
-    free(buffer);
+    buffer_destroy(buffer);
     free(str);
     free(toSend);
 }
