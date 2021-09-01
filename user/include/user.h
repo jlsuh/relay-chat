@@ -2,6 +2,7 @@
 #define SRC_USER_H_
 
 #include "utils/utils.h"
+#include <readline/readline.h>
 
 void start_chatting(int);
 void recv_distributed_msg(void*);
