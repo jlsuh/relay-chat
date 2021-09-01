@@ -3,18 +3,18 @@
 
 #include "utils/utils.h"
 
-void handle_connections(int serverSocket);
-void* suscription_handler(void* socket);
-void handle_chat_room(t_user* user);
-void lead_chat(t_user* user);
-void send_msg_to_all_users(t_user* pivot, char* msg);
-int get_user_index(t_user* target);
-t_user* get_user_info(int userSocket);
-t_chat_room* find_room(uint32_t roomID);
-void sig_int_handler(int _);
-void free_chatroom(void* aChatRoom);
-void free_user(void* aUser);
-int init_server(char *ip, char *port);
+void handle_connections(int);
+void* suscription_handler(void*);
+void handle_chat_room(t_user*);
+void lead_chat(t_user*);
+void send_msg_to_all_users(t_user*, char*);
+int get_user_index(t_user*);
+t_user* get_user_info(int);
+t_chat_room* find_room(uint32_t);
+void sig_int_handler(int);
+void free_chatroom(void*);
+void free_user(void*);
+int init_server(char*, char*);
 
 static pthread_t threads[FD_SETSIZE];
 static pthread_mutex_t userIDLock;

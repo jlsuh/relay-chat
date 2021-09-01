@@ -6,7 +6,7 @@
 
 bool deserializeNext = true;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
 	t_config* config = config_create(USER_CONFIG);
 	char* ip = config_get_string_value(config, USER_IP);
 	char* port = config_get_string_value(config, USER_PORT);
@@ -23,28 +23,28 @@ int main(int argc, char *argv[]) {
 }
 
 void start_chatting(int serverSocket) {
-	pthread_t msg_recvr;
-	pthread_create(&msg_recvr, NULL, (void*)recv_distributed_msg, (void*)&serverSocket);
+	pthread_t msg_receiver;
+	pthread_create(&msg_receiver, NULL, (void*) recv_distributed_msg, (void*) &serverSocket);
 	char* read;
 	do {
 		read = readline("");
 		if(strcmp(read, "/exit") == 0) {
-			send_str_msg(serverSocket, "/exit");
+			send_str(serverSocket, "/exit");
 			free(read);
 			puts("Disconnected from chatting room");
 			deserializeNext = false;
-			pthread_join(msg_recvr, NULL);
+			pthread_join(msg_receiver, NULL);
 			break;
 		}
-		send_str_msg(serverSocket, read);
+		send_str(serverSocket, read);
 		free(read);
 	} while (1);
 }
 
 void recv_distributed_msg(void* socket) {
-	int serverSocket = *(int*)socket;
+	int serverSocket = *(int*) socket;
 	do {
-		char* msg = (char*)deserialize_package(serverSocket, deserializeNext);
+		char* msg = (char*) deserialize_package(serverSocket, deserializeNext);
 		if(msg == NULL) {
 			free(msg);
 			close(serverSocket);
@@ -58,20 +58,20 @@ void recv_distributed_msg(void* socket) {
 }
 
 void display_deserialized_msg(int serverSocket) {
-	char* msg = (char*)deserialize_package(serverSocket, true);
+	char* msg = (char*) deserialize_package(serverSocket, true);
 	printf("%s", msg);
 	free(msg);
 }
 
 void send_user_info(int serverSocket) {
-	char* str;
-	str = malloc(sizeof(char) * 32);
-	scanf("%s", str);
+	char* userName;
+	userName = malloc(sizeof(char) * 32);
+	scanf("%s", userName);
 	t_buffer* buffer = buffer_create();
 
-	buffer_pack_string(buffer, str);
+	buffer_pack_string(buffer, userName);
 
-	send_serialized_package(serverSocket, buffer, STRING, str);
+	send_serialized_package(serverSocket, buffer, STRING, userName);
 }
 
 void send_room_info(int serverSocket) {
@@ -104,11 +104,11 @@ void free_sended_info(t_buffer* buffer, void* toSend, char* str) {
     free(toSend);
 }
 
-int connect_to_server(char *ip, char *port) {
+int connect_to_server(char* ip, char* port) {
 	int conn;
 	struct addrinfo hints;
-	struct addrinfo *serverInfo;
-	struct addrinfo *p;
+	struct addrinfo* serverInfo;
+	struct addrinfo* p;
 
 	memset(&hints, 0, sizeof(hints));	// make sure the struct is empty
 	hints.ai_family = AF_UNSPEC;		// don't care IPv4 or IPv6
