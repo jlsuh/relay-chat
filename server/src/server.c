@@ -19,11 +19,11 @@ int main(int argc, char* argv[]) {
 
 	rooms = list_create();
 
-	struct sigaction sigIntHandler;
-	sigIntHandler.sa_handler = sig_int_handler;
-	sigemptyset(&sigIntHandler.sa_mask);
-	sigIntHandler.sa_flags = 0;
-	sigaction(SIGINT, &sigIntHandler, NULL);
+	struct sigaction sigInt;
+	sigInt.sa_handler = sig_int_handler;
+	sigemptyset(&sigInt.sa_mask);
+	sigInt.sa_flags = 0;
+	sigaction(SIGINT, &sigInt, NULL);
 
 	handle_connections(serverSocket);
 
@@ -34,11 +34,10 @@ void handle_connections(int serverSocket) {
 	struct sockaddr sockAddr;
 	socklen_t addrSize = sizeof(sockAddr);
 	int userSocket;
-
 	do {
 		userSocket = accept(serverSocket, &sockAddr, &addrSize);
 		if (userSocket > 0) {
-			pthread_create(&threads[tid], NULL, suscription_handler, (void*)&userSocket);
+			pthread_create(&threads[tid], NULL, suscription_handler, (void*) &userSocket);
 			pthread_detach(threads[tid]);
 			tid += 1;
 		} else {
@@ -48,7 +47,7 @@ void handle_connections(int serverSocket) {
 }
 
 void* suscription_handler(void* socket) {
-	int userSocket = *(int*)socket;
+	int userSocket = *(int*) socket;
 	t_user* user = get_user_info(userSocket);
 
 	printf("[ID: %d] %s connected to the server\n", user->userID, user->userName);
@@ -59,15 +58,15 @@ void* suscription_handler(void* socket) {
 }
 
 void handle_chat_room(t_user* user) {
-	send_str_msg(user->socket, "[Room-to-join  RoomID]: ");
-	t_chat_room* newChatRoom = (t_chat_room*)deserialize_package(user->socket, true);
+	send_str(user->socket, "[Room-to-join  RoomID]: ");
+	t_chat_room* newChatRoom = (t_chat_room*) deserialize_package(user->socket, true);
 	t_chat_room* existentRoom = find_room(newChatRoom->roomID);
 	t_chat_room* current = NULL;
 	char* msg;
 	if(existentRoom != NULL) {
 		msg = string_from_format("%s [ID: %d] already exists. Joining room\n", existentRoom->roomName, existentRoom->roomID);
 		printf(msg);
-		send_str_msg(user->socket, msg);
+		send_str(user->socket, msg);
 
 		pthread_mutex_lock(&existentUsersLock);
 		list_add(existentRoom->users, user);
@@ -80,7 +79,7 @@ void handle_chat_room(t_user* user) {
 	} else {
 		msg = "There isn't any room by this name and ID\n";
 		printf(msg);
-		send_str_msg(user->socket, msg);
+		send_str(user->socket, msg);
 
 		// TODO: We are supposing that there will be always someone in the chatroom
 		// TODO: make sure to destroy chatroom when there aren't any users connected
@@ -100,7 +99,7 @@ void handle_chat_room(t_user* user) {
 
 		msg = string_from_format("%s [ID: %d] created\n", newChatRoom->roomName, newChatRoom->roomID);
 		printf(msg);
-		send_str_msg(user->socket, msg);
+		send_str(user->socket, msg);
 
 		current = newChatRoom;
 	}
@@ -119,16 +118,14 @@ void handle_chat_room(t_user* user) {
 
 void lead_chat(t_user* user) {
 	do {
-		t_string* msg = (t_string*)deserialize_package(user->socket, true);
-		if(strcmp(msg->content, "/exit") == 0) {
-			free(msg->content);
+		char* msg = (char*) deserialize_package(user->socket, true);
+		if(strcmp(msg, "/exit") == 0) {
 			free(msg);
 			break;
 		}
-		char* chatLog = string_from_format("%s says: %s\n", user->userName, msg->content);
+		char* chatLog = string_from_format("%s says: %s\n", user->userName, msg);
 		printf("%s", chatLog);
 		send_msg_to_all_users(user, chatLog);
-		free(msg->content);
 		free(msg);
 		free(chatLog);
 	} while(1);
@@ -147,7 +144,7 @@ void send_msg_to_all_users(t_user* pivot, char* msg) {
 	t_chat_room* currentChatRoom = pivot->currentChatRoom;
 	t_link_element* destUser = currentChatRoom->users->head;
 	while(destUser != NULL) {
-		send_str_msg(((t_user*)(destUser->data))->socket, msg);
+		send_str(((t_user*) destUser->data)->socket, msg);
 		destUser = destUser->next;
 	}
 }
@@ -156,7 +153,7 @@ int get_user_index(t_user* target) {
 	int index = 0;
 	t_link_element* aux = target->currentChatRoom->users->head;
 	while(aux != NULL) {
-		uint32_t userID = ((t_user*)aux->data)->userID;
+		uint32_t userID = ((t_user*) aux->data)->userID;
 		if(userID == target->userID) {
 			return index;
 		}
@@ -167,17 +164,16 @@ int get_user_index(t_user* target) {
 }
 
 t_user* get_user_info(int userSocket) {
-	send_str_msg(userSocket, "Input username: ");
-	t_string* userName = (t_string*)deserialize_package(userSocket, true);
+	send_str(userSocket, "Input username: ");
+	char* userName = (char*) deserialize_package(userSocket, true);
 
 	t_user* user = malloc(sizeof(t_user));
 	pthread_mutex_lock(&userIDLock);
 	user->userID = userID++;
 	pthread_mutex_unlock(&userIDLock);
-	user->userName = strdup(userName->content);
+	user->userName = strdup(userName);
 	user->socket = userSocket;
 
-	free(userName->content);
 	free(userName);
 	return user;
 }
@@ -185,9 +181,9 @@ t_user* get_user_info(int userSocket) {
 t_chat_room* find_room(uint32_t roomID) {
 	t_link_element* aux = rooms->head;
 	while(aux != NULL) {
-		uint32_t currentRoomID = ((t_chat_room*)aux->data)->roomID;
+		uint32_t currentRoomID = ((t_chat_room*) aux->data)->roomID;
 		if(currentRoomID == roomID) {
-			return (t_chat_room*)aux->data;
+			return (t_chat_room*) aux->data;
 		}
 		aux = aux->next;
 	}
@@ -212,10 +208,10 @@ void free_user(void* aUser) {
 	free(user);
 }
 
-int init_server(char *ip, char *port) {
+int init_server(char* ip, char* port) {
 	int optVal = 1;
 	struct addrinfo hints;
-	struct addrinfo *serverInfo;
+	struct addrinfo* serverInfo;
 
 	memset(&hints, 0, sizeof(hints));	// make sure the struct is empty
 	hints.ai_family = AF_UNSPEC;		// don't care IPv4 or IPv6
