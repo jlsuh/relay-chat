@@ -15,7 +15,6 @@
 
 typedef struct {
     char* content;
-    uint32_t length;
 } t_string;
 
 typedef struct {
