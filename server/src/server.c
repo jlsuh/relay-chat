@@ -119,16 +119,16 @@ void handle_chat_room(t_user* user) {
 
 void lead_chat(t_user* user) {
 	do {
-		t_string* msg = (t_string*)deserialize_package(user->socket, true);
-		if(strcmp(msg->content, "/exit") == 0) {
-			free(msg->content);
+		char* msg = (char*)deserialize_package(user->socket, true);
+		if(strcmp(msg, "/exit") == 0) {
+			// free(msg->content);
 			free(msg);
 			break;
 		}
-		char* chatLog = string_from_format("%s says: %s\n", user->userName, msg->content);
+		char* chatLog = string_from_format("%s says: %s\n", user->userName, msg);
 		printf("%s", chatLog);
 		send_msg_to_all_users(user, chatLog);
-		free(msg->content);
+		// free(msg->content);
 		free(msg);
 		free(chatLog);
 	} while(1);
@@ -168,16 +168,16 @@ int get_user_index(t_user* target) {
 
 t_user* get_user_info(int userSocket) {
 	send_str_msg(userSocket, "Input username: ");
-	t_string* userName = (t_string*)deserialize_package(userSocket, true);
+	char* userName = (char*)deserialize_package(userSocket, true);
 
 	t_user* user = malloc(sizeof(t_user));
 	pthread_mutex_lock(&userIDLock);
 	user->userID = userID++;
 	pthread_mutex_unlock(&userIDLock);
-	user->userName = strdup(userName->content);
+	user->userName = strdup(userName);
 	user->socket = userSocket;
 
-	free(userName->content);
+	// free(userName->content);
 	free(userName);
 	return user;
 }

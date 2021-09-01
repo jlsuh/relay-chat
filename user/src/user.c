@@ -44,14 +44,14 @@ void start_chatting(int serverSocket) {
 void recv_distributed_msg(void* socket) {
 	int serverSocket = *(int*)socket;
 	do {
-		t_string* msg = (t_string*)deserialize_package(serverSocket, deserializeNext);
+		char* msg = (char*)deserialize_package(serverSocket, deserializeNext);
 		if(msg == NULL) {
 			free(msg);
 			close(serverSocket);
 			break;
 		} else {
-			printf("%s", msg->content);
-			free(msg->content);
+			printf("%s", msg);
+			// free(msg->content);
 			free(msg);
 		}
 	} while(1);
@@ -59,32 +59,32 @@ void recv_distributed_msg(void* socket) {
 }
 
 void display_deserialized_msg(int serverSocket) {
-	t_string* msg = (t_string*)deserialize_package(serverSocket, true);
-	printf("%s", msg->content);
-	free(msg->content);
+	char* msg = (char*)deserialize_package(serverSocket, true);
+	printf("%s", msg);
+	// free(msg->content);
 	free(msg);
 }
 
 void send_user_info(int serverSocket) {
-	t_string str;
-	str.content = malloc(sizeof(char) * 32);
-	scanf("%s", str.content);
+	char* str;
+	str = malloc(sizeof(char) * 32);
+	scanf("%s", str);
 	t_buffer* buffer = serialize_string(str);
 
 	send_serialized_package(serverSocket, buffer, STRING, str);
 }
 
 void send_room_info(int serverSocket) {
-	t_string roomName;
+	char* roomName;
 	uint32_t roomID;
-	roomName.content = malloc(sizeof(char) * 32);
-	scanf("%s %d", roomName.content, &roomID);
+	roomName = malloc(sizeof(char) * 32);
+	scanf("%s %d", roomName, &roomID);
 	t_buffer* buffer = serialize_chat_room(roomName, roomID);
 
 	send_serialized_package(serverSocket, buffer, ROOMINFO, roomName);
 }
 
-void send_serialized_package(int serverSocket, t_buffer* buffer, op_code opCode, t_string str) {
+void send_serialized_package(int serverSocket, t_buffer* buffer, op_code opCode, char* str) {
 	void* toSend = serialize_package(opCode, buffer);
 	send_package(serverSocket, toSend, buffer);
 	free_sended_info(buffer, toSend, str);
@@ -95,10 +95,10 @@ void exchange_info(int serverSocket, void(*info_sender)(int)) {
 	info_sender(serverSocket);
 }
 
-void free_sended_info(t_buffer* buffer, void* toSend, t_string str) {
+void free_sended_info(t_buffer* buffer, void* toSend, char* str) {
     free(buffer->stream);
     free(buffer);
-    free(str.content);
+    free(str);
     free(toSend);
 }
 

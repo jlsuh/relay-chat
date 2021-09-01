@@ -5,17 +5,14 @@ void send_package(int userSocket, void* toSend, t_buffer* buffer) {
 }
 
 void send_str_msg(int socket, char* str) {
-    t_string msg = {
-        .content = strdup(str)
-    };
-    t_buffer* buffer = serialize_string(msg);
+    t_buffer* buffer = serialize_string(str);
 
     void* toSend = serialize_package(STRING, buffer);
     send_package(socket, toSend, buffer);
 
     free(buffer->stream);
     free(buffer);
-    free(msg.content);
+    // free(msg.content);
     free(toSend);
 }
 
@@ -26,23 +23,23 @@ t_buffer* create_buffer(size_t size, void* stream) {
     return buffer;
 }
 
-t_buffer* serialize_string(t_string msg) {
-    uint32_t length = strlen(msg.content) + 1;
+t_buffer* serialize_string(char* msg) {
+    uint32_t length = strlen(msg) + 1;
     size_t size = sizeof(uint32_t) + length;
     void* stream = malloc(size);
     int offset = 0;
 
     memcpy(stream + offset, &length, sizeof(uint32_t));
     offset += sizeof(uint32_t);
-    memcpy(stream + offset, msg.content, strlen(msg.content) + 1);
+    memcpy(stream + offset, msg, length);
 
     t_buffer* buffer = create_buffer(size, stream);
 
     return buffer;
 }
 
-t_buffer* serialize_chat_room(t_string roomName, uint32_t roomID) {
-    uint32_t length = strlen(roomName.content) + 1;
+t_buffer* serialize_chat_room(char* roomName, uint32_t roomID) {
+    uint32_t length = strlen(roomName) + 1;
     size_t size = sizeof(uint32_t) * 2 + length;
     void* stream = malloc(size);
     int offset = 0;
@@ -51,7 +48,7 @@ t_buffer* serialize_chat_room(t_string roomName, uint32_t roomID) {
     offset += sizeof(uint32_t);
     memcpy(stream + offset, &length, sizeof(uint32_t));
     offset += sizeof(uint32_t);
-    memcpy(stream + offset, roomName.content, strlen(roomName.content) + 1);
+    memcpy(stream + offset, roomName, length);
 
     t_buffer* buffer = create_buffer(size, stream);
 
@@ -125,16 +122,16 @@ t_chat_room* deserialize_chat_room(t_buffer* buffer) {
     return chatRoom;
 }
 
-t_string* deserialize_string(t_buffer* buffer) {
-    t_string* msg = malloc(sizeof(t_string));
+char* deserialize_string(t_buffer* buffer) {
+    char* msg;
     uint32_t length;
 
     void* stream = buffer->stream;
 
     memcpy(&length, stream, sizeof(uint32_t));
     stream += sizeof(uint32_t);
-    msg->content = malloc(length);
-    memcpy(msg->content, stream, length);
+    msg = malloc(length);
+    memcpy(msg, stream, length);
 
     free(buffer->stream);
     free(buffer);

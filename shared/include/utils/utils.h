@@ -14,10 +14,6 @@
 #include <netdb.h>
 
 typedef struct {
-    char* content;
-} t_string;
-
-typedef struct {
     uint32_t size;
     void* stream;
 } t_buffer;
@@ -46,12 +42,12 @@ typedef enum {
 
 void send_package(int userSocket, void* toSend, t_buffer* buffer);
 void send_str_msg(int socket, char* str);
-t_buffer* serialize_string(t_string msg);
-t_buffer* serialize_chat_room(t_string roomName, uint32_t roomID);
+t_buffer* serialize_string(char* msg);
+t_buffer* serialize_chat_room(char* roomName, uint32_t roomID);
 void* serialize_package(uint8_t op_code, t_buffer* buffer);
 void* deserialize_package(int serverSocket, bool deserializeNext);
 t_chat_room* deserialize_chat_room(t_buffer* buffer);
-t_string* deserialize_string(t_buffer* buffer);
+char* deserialize_string(t_buffer* buffer);
 t_buffer* create_buffer(size_t size, void* stream);
 
 #endif
