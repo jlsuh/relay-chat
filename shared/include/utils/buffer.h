@@ -1,7 +1,7 @@
 #ifndef SHARED_BUFFER_H_
 #define SHARED_BUFFER_H_
 
-#include "chat-room.h"
+#include "chat_room.h"
 #include <stdio.h>
 #include <string.h>
 
