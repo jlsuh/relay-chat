@@ -9,9 +9,8 @@
 	for(unsigned long i = 0; i < ARRAY_LENGTH(test_functions); i++)\
 		CU_add_test(test_suite, test_functions[i].testName, test_functions[i].test);
 
-
 typedef struct {
-    const char* testName;
+	const char* testName;
 	void(*test)(void);
 } t_test_case;
 
