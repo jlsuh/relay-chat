@@ -9,16 +9,16 @@ t_buffer* buffer_create() {
 
 void buffer_pack(t_buffer* buffer, void* streamToAdd, int size) {
     buffer->stream = realloc(buffer->stream, buffer->size + size);  // Allocate more memory than original
-	memcpy(buffer->stream + buffer->size, streamToAdd, size);       // Add new stream from last position
-	buffer->size += size;                                           // Update buffer size
+    memcpy(buffer->stream + buffer->size, streamToAdd, size);       // Add new stream from last position
+    buffer->size += size;                                           // Update buffer size
 }
 
 void* buffer_pack_string(t_buffer* buffer, char* stringToAdd) {
     uint32_t length = strlen(stringToAdd) + 1;
     buffer_pack(buffer, &length, sizeof(length));
     buffer->stream = realloc(buffer->stream, buffer->size + length);
-	memcpy(buffer->stream + buffer->size, stringToAdd, length);
-	buffer->size += length;
+    memcpy(buffer->stream + buffer->size, stringToAdd, length);
+    buffer->size += length;
     return buffer;
 }
 
@@ -29,10 +29,10 @@ void* buffer_pack_chat_room(t_buffer* buffer, uint32_t roomID, char* roomName) {
 }
 
 void buffer_unpack(t_buffer* buffer, void* dest, int size) {
-	memcpy(dest, buffer->stream, size);
-	buffer->size -= size;
-	memmove(buffer->stream, buffer->stream + size, buffer->size);
-	buffer->stream = realloc(buffer->stream, buffer->size);
+    memcpy(dest, buffer->stream, size);
+    buffer->size -= size;
+    memmove(buffer->stream, buffer->stream + size, buffer->size);
+    buffer->stream = realloc(buffer->stream, buffer->size);
 }
 
 t_chat_room* buffer_unpack_chat_room(t_buffer* buffer) {
@@ -44,12 +44,12 @@ t_chat_room* buffer_unpack_chat_room(t_buffer* buffer) {
 }
 
 char* buffer_unpack_string(t_buffer* buffer) {
-	char* str;
-	uint32_t length;
-	buffer_unpack(buffer, &length, sizeof(uint32_t));
-	str = malloc(length);
-	buffer_unpack(buffer, str, length);
-	return str;
+    char* str;
+    uint32_t length;
+    buffer_unpack(buffer, &length, sizeof(length));
+    str = malloc(length);
+    buffer_unpack(buffer, str, length);
+    return str;
 }
 
 void buffer_destroy(t_buffer* buffer) {

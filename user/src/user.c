@@ -3,6 +3,7 @@
 #define USER_CONFIG "cfg/user.config"
 #define USER_IP "IP"
 #define USER_PORT "PORT"
+#define MAX_USERNAME_LENGTH 32
 
 bool deserializeNext = true;
 
@@ -65,7 +66,7 @@ void display_deserialized_msg(int serverSocket) {
 
 void send_user_info(int serverSocket) {
 	char* userName;
-	userName = malloc(sizeof(char) * 32);
+	userName = malloc(MAX_USERNAME_LENGTH);
 	scanf("%s", userName);
 	t_buffer* buffer = buffer_create();
 	buffer_pack_string(buffer, userName);
@@ -75,7 +76,7 @@ void send_user_info(int serverSocket) {
 void send_room_info(int serverSocket) {
 	char* roomName;
 	uint32_t roomID;
-	roomName = malloc(sizeof(char) * 32);
+	roomName = malloc(MAX_USERNAME_LENGTH);
 	scanf("%s %d", roomName, &roomID);
 	t_buffer* buffer = buffer_create();
 	buffer_pack_chat_room(buffer, roomID, roomName);
@@ -94,9 +95,9 @@ void exchange_info(int serverSocket, void(*info_sender)(int)) {
 }
 
 void free_sended_info(t_buffer* buffer, void* toSend, char* str) {
-    buffer_destroy(buffer);
-    free(str);
-    free(toSend);
+	buffer_destroy(buffer);
+	free(str);
+	free(toSend);
 }
 
 int connect_to_server(char* ip, char* port) {
