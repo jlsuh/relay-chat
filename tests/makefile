@@ -1,5 +1,5 @@
 # Include libraries here
-LIBRARIES=shared cspecs
+LIBRARIES=shared cspecs cunit
 # Include custom library paths here
 LIBRARY_PATHS=../shared
 
