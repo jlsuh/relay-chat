@@ -46,7 +46,7 @@ t_chat_room* buffer_unpack_chat_room(t_buffer* buffer) {
 char* buffer_unpack_string(t_buffer* buffer) {
     char* str;
     uint32_t length;
-    buffer_unpack(buffer, &length, sizeof(uint32_t));
+    buffer_unpack(buffer, &length, sizeof(length));
     str = malloc(length);
     buffer_unpack(buffer, str, length);
     return str;

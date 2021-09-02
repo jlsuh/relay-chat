@@ -230,7 +230,7 @@ int init_server(char* ip, char* port) {
 		return EXIT_FAILURE;
 	}
 
-	int sockOpt = setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &optVal, sizeof(int));
+	int sockOpt = setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &optVal, sizeof(sockOpt));
 	if (sockOpt == -1) {
 		printf("Sockopt error\n%s", strerror(errno));
 		return EXIT_FAILURE;
