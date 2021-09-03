@@ -21,13 +21,10 @@ void utils_tests(void) {
         test_utils_buffer_setup,
         test_utils_buffer_tear_down
     );
-    t_test_case bufferTestCases[] = {
-        FUNCTION_TEST(test_buffer_create),
-        FUNCTION_TEST(test_buffer_pack_values),
-        FUNCTION_TEST(test_buffer_unpack),
-        FUNCTION_TEST(test_buffer_pack_unpack_string),
-        FUNCTION_TEST(test_buffer_pack_unpack_chat_room),
-    };
-    ADD_TEST_CASES_TO_TEST_SUITE(bufferSuite, bufferTestCases);
+    CU_add_test(bufferSuite, "test_buffer_create", test_buffer_create);
+    CU_add_test(bufferSuite, "test_buffer_pack_values", test_buffer_pack_values);
+    CU_add_test(bufferSuite, "test_buffer_unpack", test_buffer_unpack);
+    CU_add_test(bufferSuite, "test_buffer_pack_unpack_string", test_buffer_pack_unpack_string);
+    CU_add_test(bufferSuite, "test_buffer_pack_unpack_chat_room", test_buffer_pack_unpack_chat_room);
 
 }
