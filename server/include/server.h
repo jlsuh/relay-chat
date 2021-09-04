@@ -12,8 +12,6 @@ int get_user_index(t_user*);
 t_user* get_user_info(int);
 t_chat_room* find_room(uint32_t);
 void sig_int_handler(int);
-void free_chatroom(void*);
-void free_user(void*);
 int init_server(char*, char*);
 
 static pthread_t threads[FD_SETSIZE];

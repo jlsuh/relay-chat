@@ -44,17 +44,24 @@ void test_buffer_unpack(void) {
     CU_ASSERT_EQUAL(uint8_, uint8);
     CU_ASSERT_EQUAL(uint32_, uint32);
     CU_ASSERT_STRING_EQUAL(msg_, msg);
+
+    free(msg_);
 }
 
 void test_buffer_pack_unpack_string(void) {
     buffer_pack_string(buffer, "samsepi0l");
     char* actual = buffer_unpack_string(buffer);
     CU_ASSERT_STRING_EQUAL(actual, "samsepi0l");
+
+    free(actual);
 }
 
 void test_buffer_pack_unpack_chat_room(void) {
     buffer_pack_chat_room(buffer, 0, "th3g3ntl3man");
     t_chat_room* chatRoom = buffer_unpack_chat_room(buffer);
+    chatRoom->users = list_create();
     CU_ASSERT_EQUAL(chatRoom->roomID, 0);
     CU_ASSERT_STRING_EQUAL(chatRoom->roomName, "th3g3ntl3man");
+
+    free_chatroom(chatRoom);
 }

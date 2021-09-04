@@ -13,19 +13,17 @@ void buffer_pack(t_buffer* buffer, void* streamToAdd, int size) {
     buffer->size += size;                                           // Update buffer size
 }
 
-void* buffer_pack_string(t_buffer* buffer, char* stringToAdd) {
+void buffer_pack_string(t_buffer* buffer, char* stringToAdd) {
     uint32_t length = strlen(stringToAdd) + 1;
     buffer_pack(buffer, &length, sizeof(length));
     buffer->stream = realloc(buffer->stream, buffer->size + length);
     memcpy(buffer->stream + buffer->size, stringToAdd, length);
     buffer->size += length;
-    return buffer;
 }
 
-void* buffer_pack_chat_room(t_buffer* buffer, uint32_t roomID, char* roomName) {
+void buffer_pack_chat_room(t_buffer* buffer, uint32_t roomID, char* roomName) {
     buffer_pack(buffer, &roomID, sizeof(roomID));
     buffer_pack_string(buffer, roomName);
-    return buffer;
 }
 
 void buffer_unpack(t_buffer* buffer, void* dest, int size) {

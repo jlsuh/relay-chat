@@ -11,4 +11,4 @@ clean:
 	make clean -C tests
 
 test:
-	./tests/bin/tests.out
+	valgrind --leak-check=full ./tests/bin/tests.out
