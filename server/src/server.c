@@ -191,7 +191,7 @@ t_chat_room* find_room(uint32_t roomID) {
 }
 
 void sig_int_handler(int _) {
-	list_destroy_and_destroy_elements(rooms, free_chatroom);
+	list_destroy_and_destroy_elements(rooms, chat_room_destroy);
 	exit(EXIT_SUCCESS);
 }
 

@@ -63,5 +63,5 @@ void test_buffer_pack_unpack_chat_room(void) {
     CU_ASSERT_EQUAL(chatRoom->roomID, 0);
     CU_ASSERT_STRING_EQUAL(chatRoom->roomName, "th3g3ntl3man");
 
-    free_chatroom(chatRoom);
+    chat_room_destroy(chatRoom);
 }
