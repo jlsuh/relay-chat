@@ -3,15 +3,15 @@
 
 #include "utils/buffer_test.h"
 
-#define FUNCTION_TEST(f) { "\033[93m"#f"\033[0m", f }
+#define FUNCTION_TEST(func) { "\e[1;92m"#func"\e[0m", func }
 #define ARRAY_LENGTH(array)	(sizeof((array)) / sizeof(*(array)))
-#define ADD_TEST_CASES_TO_TEST_SUITE(test_suite, test_functions)\
-	for(unsigned long i = 0; i < ARRAY_LENGTH(test_functions); i++)\
-		CU_add_test(test_suite, test_functions[i].testName, test_functions[i].test);
+#define ADD_TEST_CASES_TO_SUITE(suite, tests)\
+	for(unsigned long i = 0; i < ARRAY_LENGTH(tests); i++)\
+		CU_add_test(suite, tests[i].name, tests[i].func);
 
 typedef struct {
-	const char* testName;
-	void(*test)(void);
+	const char* name;
+	void(*func)(void);
 } t_test_case;
 
 void utils_tests(void);

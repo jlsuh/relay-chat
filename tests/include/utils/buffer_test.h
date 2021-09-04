@@ -1,8 +1,8 @@
 #ifndef TESTS_UTILS_BUFFER_TEST_H_
 #define TESTS_UTILS_BUFFER_TEST_H_
 
-#include "utils/buffer.h"
 #include <CUnit/Basic.h>
+#include "utils/buffer.h"
 
 void test_utils_buffer_setup(void);
 void test_utils_buffer_tear_down(void);

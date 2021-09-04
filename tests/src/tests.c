@@ -1,6 +1,6 @@
 #include "tests.h"
 
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
     CU_initialize_registry();
     CU_basic_set_mode(CU_BRM_VERBOSE);
 
@@ -28,6 +28,6 @@ void utils_tests(void) {
         FUNCTION_TEST(test_buffer_pack_unpack_string),
         FUNCTION_TEST(test_buffer_pack_unpack_chat_room),
     };
-    ADD_TEST_CASES_TO_TEST_SUITE(bufferSuite, bufferTestCases);
+    ADD_TEST_CASES_TO_SUITE(bufferSuite, bufferTestCases);
 
 }

@@ -15,13 +15,6 @@ typedef struct {
     t_buffer* buffer;
 } t_package;
 
-typedef struct {
-    uint32_t userID;
-    char* userName;
-    uint32_t socket;
-    t_chat_room* currentChatRoom;
-} t_user;
-
 typedef enum {
     STRING, ROOMINFO,
 } op_code;

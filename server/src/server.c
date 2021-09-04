@@ -191,21 +191,8 @@ t_chat_room* find_room(uint32_t roomID) {
 }
 
 void sig_int_handler(int _) {
-	list_destroy_and_destroy_elements(rooms, free_chatroom);
+	list_destroy_and_destroy_elements(rooms, chat_room_destroy);
 	exit(EXIT_SUCCESS);
-}
-
-void free_chatroom(void* aChatRoom) {
-	t_chat_room* chatRoom = (t_chat_room*) aChatRoom;
-	free(chatRoom->roomName);
-	list_destroy_and_destroy_elements(chatRoom->users, free_user);
-	free(chatRoom);
-}
-
-void free_user(void* aUser) {
-	t_user* user = (t_user*) aUser;
-	free(user->userName);
-	free(user);
 }
 
 int init_server(char* ip, char* port) {
