@@ -1,9 +1,5 @@
 #include "server.h"
 
-#define SERVER_CONFIG "cfg/server.config"
-#define SERVER_IP "IP"
-#define SERVER_PORT "PORT"
-
 static int tid = 0;
 static uint32_t userID = 0;
 static uint32_t roomID = 0;

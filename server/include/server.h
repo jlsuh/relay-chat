@@ -3,6 +3,10 @@
 
 #include "common_utils.h"
 
+#define SERVER_CONFIG "cfg/server.config"
+#define SERVER_IP "IP"
+#define SERVER_PORT "PORT"
+
 void handle_connections(int);
 void* suscription_handler(void*);
 void handle_chat_room(t_user*);
