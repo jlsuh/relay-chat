@@ -41,7 +41,7 @@ void* package_deserialize(int serverSocket, bool deserializeNext) {
         return NULL;
     }
     t_package* package = malloc(sizeof(t_package));
-    package->buffer = malloc(sizeof(t_buffer));
+    package->buffer = malloc(sizeof(t_buffer)); // TODO
 
     recv(serverSocket, &(package->opCode), sizeof(package->opCode), 0);
     recv(serverSocket, &(package->buffer->size), sizeof(package->buffer->size), 0);
