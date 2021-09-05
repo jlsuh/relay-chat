@@ -30,14 +30,14 @@ void start_chatting(int serverSocket) {
 	do {
 		read = readline("");
 		if(strcmp(read, "/exit") == 0) {
-			send_str(serverSocket, "/exit");
+			string_send(serverSocket, "/exit");
 			free(read);
 			puts("Disconnected from chatting room");
 			deserializeNext = false;
 			pthread_join(msg_receiver, NULL);
 			break;
 		}
-		send_str(serverSocket, read);
+		string_send(serverSocket, read);
 		free(read);
 	} while (1);
 }
@@ -45,7 +45,7 @@ void start_chatting(int serverSocket) {
 void recv_distributed_msg(void* socket) {
 	int serverSocket = *(int*) socket;
 	do {
-		char* msg = (char*) deserialize_package(serverSocket, deserializeNext);
+		char* msg = (char*) package_deserialize(serverSocket, deserializeNext);
 		if(msg == NULL) {
 			free(msg);
 			close(serverSocket);
@@ -59,7 +59,7 @@ void recv_distributed_msg(void* socket) {
 }
 
 void display_deserialized_msg(int serverSocket) {
-	char* msg = (char*) deserialize_package(serverSocket, true);
+	char* msg = (char*) package_deserialize(serverSocket, true);
 	printf("%s", msg);
 	free(msg);
 }
@@ -84,8 +84,8 @@ void send_room_info(int serverSocket) {
 }
 
 void send_serialized_package(int serverSocket, t_buffer* buffer, op_code opCode, char* str) {
-	void* toSend = serialize_package(opCode, buffer);
-	send_package(serverSocket, toSend, buffer);
+	void* toSend = package_serialize(opCode, buffer);
+	package_send(serverSocket, toSend, buffer->size);
 	free_sended_info(buffer, toSend, str);
 }
 

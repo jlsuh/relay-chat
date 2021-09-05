@@ -15,11 +15,11 @@ int main(int argc, char* argv[]) {
 void utils_tests(void) {
 
     CU_pSuite bufferSuite = CU_add_suite_with_setup_and_teardown(
-        "utils/buffer.h Test Suite",
+        "buffer.h Test Suite",
         NULL,
         NULL,
-        test_utils_buffer_setup,
-        test_utils_buffer_tear_down
+        test_buffer_setup,
+        test_buffer_tear_down
     );
     t_test_case bufferTestCases[] = {
         FUNCTION_TEST(test_buffer_create),
@@ -29,5 +29,17 @@ void utils_tests(void) {
         FUNCTION_TEST(test_buffer_pack_unpack_chat_room),
     };
     ADD_TEST_CASES_TO_SUITE(bufferSuite, bufferTestCases);
+
+    CU_pSuite packageSuite = CU_add_suite_with_setup_and_teardown(
+        "package.h Test Suite",
+        NULL,
+        NULL,
+        test_package_setup,
+        test_package_tear_down
+    );
+    t_test_case packageTestCases[] = {
+        FUNCTION_TEST(test_package_create_from_empty_buffer),
+    };
+    ADD_TEST_CASES_TO_SUITE(packageSuite, packageTestCases);
 
 }

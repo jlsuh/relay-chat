@@ -1,7 +1,7 @@
 #ifndef SRC_USER_H_
 #define SRC_USER_H_
 
-#include "utils/utils.h"
+#include "common_utils.h"
 #include <readline/readline.h>
 
 void start_chatting(int);

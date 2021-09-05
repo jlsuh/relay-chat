@@ -48,7 +48,7 @@ void handle_connections(int serverSocket) {
 
 void* suscription_handler(void* socket) {
 	int userSocket = *(int*) socket;
-	t_user* user = get_user_info(userSocket);
+	t_user* user = recv_user_info(userSocket);
 
 	printf("[ID: %d] %s connected to the server\n", user->userID, user->userName);
 
@@ -58,15 +58,15 @@ void* suscription_handler(void* socket) {
 }
 
 void handle_chat_room(t_user* user) {
-	send_str(user->socket, "[Room-to-join  RoomID]: ");
-	t_chat_room* newChatRoom = (t_chat_room*) deserialize_package(user->socket, true);
+	string_send(user->socket, "[Room-to-join  RoomID]: ");
+	t_chat_room* newChatRoom = (t_chat_room*) package_deserialize(user->socket, true);
 	t_chat_room* existentRoom = find_room(newChatRoom->roomID);
 	t_chat_room* current = NULL;
 	char* msg;
 	if(existentRoom != NULL) {
 		msg = string_from_format("%s [ID: %d] already exists. Joining room\n", existentRoom->roomName, existentRoom->roomID);
 		printf(msg);
-		send_str(user->socket, msg);
+		string_send(user->socket, msg);
 
 		pthread_mutex_lock(&existentUsersLock);
 		list_add(existentRoom->users, user);
@@ -79,7 +79,7 @@ void handle_chat_room(t_user* user) {
 	} else {
 		msg = "There isn't any room by this name and ID\n";
 		printf(msg);
-		send_str(user->socket, msg);
+		string_send(user->socket, msg);
 
 		// TODO: We are supposing that there will be always someone in the chatroom
 		// TODO: make sure to destroy chatroom when there aren't any users connected
@@ -99,7 +99,7 @@ void handle_chat_room(t_user* user) {
 
 		msg = string_from_format("%s [ID: %d] created\n", newChatRoom->roomName, newChatRoom->roomID);
 		printf(msg);
-		send_str(user->socket, msg);
+		string_send(user->socket, msg);
 
 		current = newChatRoom;
 	}
@@ -113,12 +113,12 @@ void handle_chat_room(t_user* user) {
 	free(toDistribute);
 	free(msg);
 
-	lead_chat(user);
+	lead_chat_room(user);
 }
 
-void lead_chat(t_user* user) {
+void lead_chat_room(t_user* user) {
 	do {
-		char* msg = (char*) deserialize_package(user->socket, true);
+		char* msg = (char*) package_deserialize(user->socket, true);
 		if(strcmp(msg, "/exit") == 0) {
 			free(msg);
 			break;
@@ -144,7 +144,7 @@ void send_msg_to_all_users(t_user* pivot, char* msg) {
 	t_chat_room* currentChatRoom = pivot->currentChatRoom;
 	t_link_element* destUser = currentChatRoom->users->head;
 	while(destUser != NULL) {
-		send_str(((t_user*) destUser->data)->socket, msg);
+		string_send(((t_user*) destUser->data)->socket, msg);
 		destUser = destUser->next;
 	}
 }
@@ -163,9 +163,9 @@ int get_user_index(t_user* target) {
 	return -1;
 }
 
-t_user* get_user_info(int userSocket) {
-	send_str(userSocket, "Input username: ");
-	char* userName = (char*) deserialize_package(userSocket, true);
+t_user* recv_user_info(int userSocket) {
+	string_send(userSocket, "Input username: ");
+	char* userName = (char*) package_deserialize(userSocket, true);
 
 	t_user* user = malloc(sizeof(t_user));
 	pthread_mutex_lock(&userIDLock);

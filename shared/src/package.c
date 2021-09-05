@@ -1,34 +1,42 @@
-#include "utils/utils.h"
+#include "package.h"
 
-void send_package(int userSocket, void* toSend, t_buffer* buffer) {
-    send(userSocket, toSend, buffer->size + sizeof(uint8_t) + sizeof(uint32_t), 0);
+void package_send(int userSocket, void* toSend, uint32_t bufferSize) {
+    send(userSocket, toSend, sizeof(uint8_t) + sizeof(uint32_t) + bufferSize, 0);
 }
 
-void send_str(int socket, char* str) {
-    t_buffer* buffer = buffer_create();
-    buffer_pack_string(buffer, str);
-    void* toSend = serialize_package(STRING, buffer);
-    send_package(socket, toSend, buffer);
-    buffer_destroy(buffer);
-    free(toSend);
-}
-
-void* serialize_package(uint8_t anOpCode, t_buffer* buffer) {
+t_package* package_create(uint8_t opCode, t_buffer* buffer) {
     t_package* package = malloc(sizeof(t_package));
-    package->opCode = anOpCode;
-    package->buffer = buffer;
-    void* toSend = malloc(buffer->size + sizeof(package->opCode) + sizeof(package->buffer->size));
+    package->opCode = opCode;
+    package->buffer = buffer_create();
+    memcpy(package->buffer, buffer, sizeof(t_buffer));
+    package->buffer->stream = malloc(buffer->size);
+    memcpy(package->buffer->stream, buffer->stream, buffer->size);
+    return package;
+}
+
+void package_destroy(t_package* package) {
+    buffer_destroy(package->buffer);
+    free(package);
+}
+
+void* package_serialize(uint8_t opCode, t_buffer* buffer) {
+    t_package* package = package_create(opCode, buffer);
+
+    void* toSend = malloc(sizeof(package->opCode) + sizeof(package->buffer->size) + package->buffer->size);
     int offset = 0;
+
     memcpy(toSend + offset, &(package->opCode), sizeof(package->opCode));
     offset += sizeof(package->opCode);
     memcpy(toSend + offset, &(package->buffer->size), sizeof(package->buffer->size));
     offset += sizeof(package->buffer->size);
     memcpy(toSend + offset, package->buffer->stream, package->buffer->size);
-    free(package);
+
+    package_destroy(package);
+
     return toSend;
 }
 
-void* deserialize_package(int serverSocket, bool deserializeNext) {
+void* package_deserialize(int serverSocket, bool deserializeNext) {
     if(!deserializeNext) {
         return NULL;
     }
