@@ -2,11 +2,11 @@
 
 static t_buffer* buffer;
 
-void test_utils_buffer_setup(void) {
+void test_buffer_setup(void) {
     buffer = buffer_create();
 }
 
-void test_utils_buffer_tear_down(void) {
+void test_buffer_tear_down(void) {
     buffer_destroy(buffer);
 }
 

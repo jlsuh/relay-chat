@@ -4,8 +4,8 @@
 #include <CUnit/Basic.h>
 #include "utils/buffer.h"
 
-void test_utils_buffer_setup(void);
-void test_utils_buffer_tear_down(void);
+void test_buffer_setup(void);
+void test_buffer_tear_down(void);
 
 void test_buffer_create(void);
 void test_buffer_pack_values(void);

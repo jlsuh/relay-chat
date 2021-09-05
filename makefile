@@ -10,5 +10,5 @@ clean:
 	make clean -C user
 	make clean -C tests
 
-test:
+test: all
 	valgrind --leak-check=full ./tests/bin/tests.out
