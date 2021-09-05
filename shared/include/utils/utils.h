@@ -19,11 +19,11 @@ typedef enum {
     STRING, ROOMINFO,
 } op_code;
 
-void send_package(int, void*, uint32_t);
-void send_str(int, char*);
-void* serialize_package(uint8_t, t_buffer*);
-void* deserialize_package(int, bool);
-void package_destroy(t_package*);
-t_package* package_create(uint8_t, t_buffer*);
+void package_send(int userSocket, void* toSend, uint32_t bufferSize);
+void string_send(int socket, char* str);
+t_package* package_create(uint8_t opCode, t_buffer* buffer);
+void package_destroy(t_package* package);
+void* package_serialize(uint8_t opCode, t_buffer* buffer);
+void* package_deserialize(int serverSocket, bool deserializeNext);
 
 #endif

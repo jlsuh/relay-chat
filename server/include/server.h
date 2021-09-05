@@ -6,10 +6,10 @@
 void handle_connections(int);
 void* suscription_handler(void*);
 void handle_chat_room(t_user*);
-void lead_chat(t_user*);
+void lead_chat_room(t_user*);
 void send_msg_to_all_users(t_user*, char*);
 int get_user_index(t_user*);
-t_user* get_user_info(int);
+t_user* recv_user_info(int);
 t_chat_room* find_room(uint32_t);
 void sig_int_handler(int);
 int init_server(char*, char*);
