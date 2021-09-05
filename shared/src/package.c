@@ -1,4 +1,4 @@
-#include "utils/package.h"
+#include "package.h"
 
 void package_send(int userSocket, void* toSend, uint32_t bufferSize) {
     send(userSocket, toSend, sizeof(uint8_t) + sizeof(uint32_t) + bufferSize, 0);

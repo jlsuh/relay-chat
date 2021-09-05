@@ -1,8 +1,8 @@
 #ifndef TESTS_UTILS_TESTS_H_
 #define TESTS_UTILS_TESTS_H_
 
-#include "utils/buffer_test.h"
-#include "utils/package_test.h"
+#include "buffer_test.h"
+#include "package_test.h"
 
 #define FUNCTION_TEST(func) { "\e[1;92m"#func"\e[0m", func }
 #define ARRAY_LENGTH(array)	(sizeof((array)) / sizeof(*(array)))

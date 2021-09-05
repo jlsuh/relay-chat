@@ -1,4 +1,4 @@
-#include "utils/buffer_test.h"
+#include "buffer_test.h"
 
 static t_buffer* buffer;
 

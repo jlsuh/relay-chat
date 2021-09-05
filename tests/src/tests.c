@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 void utils_tests(void) {
 
     CU_pSuite bufferSuite = CU_add_suite_with_setup_and_teardown(
-        "utils/buffer.h Test Suite",
+        "buffer.h Test Suite",
         NULL,
         NULL,
         test_buffer_setup,
@@ -31,7 +31,7 @@ void utils_tests(void) {
     ADD_TEST_CASES_TO_SUITE(bufferSuite, bufferTestCases);
 
     CU_pSuite packageSuite = CU_add_suite_with_setup_and_teardown(
-        "utils/package.h Test Suite",
+        "package.h Test Suite",
         NULL,
         NULL,
         test_package_setup,

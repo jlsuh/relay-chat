@@ -1,7 +1,7 @@
 #ifndef SRC_SERVER_H_
 #define SRC_SERVER_H_
 
-#include "utils/utils.h"
+#include "common_utils.h"
 
 void handle_connections(int);
 void* suscription_handler(void*);

@@ -1,7 +1,7 @@
 #ifndef SHARED_PACKAGE_H_
 #define SHARED_PACKAGE_H_
 
-#include "utils/buffer.h"
+#include "buffer.h"
 #include <netdb.h>
 
 typedef struct {

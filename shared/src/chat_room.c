@@ -1,4 +1,4 @@
-#include "utils/chat_room.h"
+#include "chat_room.h"
 
 void chat_room_destroy(void* aChatRoom) {
 	t_chat_room* chatRoom = (t_chat_room*) aChatRoom;

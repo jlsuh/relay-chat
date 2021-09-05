@@ -1,4 +1,4 @@
-#include "utils/package_test.h"
+#include "package_test.h"
 
 static t_package* package;
 static t_buffer* buffer;
