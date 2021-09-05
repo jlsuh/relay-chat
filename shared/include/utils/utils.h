@@ -19,9 +19,11 @@ typedef enum {
     STRING, ROOMINFO,
 } op_code;
 
-void send_package(int, void*, t_buffer*);
+void send_package(int, void*, uint32_t);
 void send_str(int, char*);
 void* serialize_package(uint8_t, t_buffer*);
 void* deserialize_package(int, bool);
+void package_destroy(t_package*);
+t_package* package_create(uint8_t, t_buffer*);
 
 #endif

@@ -85,7 +85,7 @@ void send_room_info(int serverSocket) {
 
 void send_serialized_package(int serverSocket, t_buffer* buffer, op_code opCode, char* str) {
 	void* toSend = serialize_package(opCode, buffer);
-	send_package(serverSocket, toSend, buffer);
+	send_package(serverSocket, toSend, buffer->size);
 	free_sended_info(buffer, toSend, str);
 }
 
