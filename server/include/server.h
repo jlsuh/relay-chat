@@ -27,4 +27,8 @@ static pthread_mutex_t roomsLock;
 static pthread_mutex_t usersLock;
 static pthread_mutex_t existentUsersLock;
 
+static int tid = 0;
+static uint32_t userID = 0;
+static uint32_t roomID = 0;
+
 #endif
