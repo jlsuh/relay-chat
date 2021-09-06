@@ -45,7 +45,7 @@ void start_chatting(int serverSocket) {
 void recv_distributed_msg(void* socket) {
 	int serverSocket = *(int*) socket;
 	do {
-		char* msg = (char*) package_deserialize(serverSocket, deserializeNext);
+		char* msg = (char*) stream_deserialize(serverSocket, deserializeNext);
 		if(msg == NULL) {
 			free(msg);
 			close(serverSocket);
@@ -59,7 +59,7 @@ void recv_distributed_msg(void* socket) {
 }
 
 void display_deserialized_msg(int serverSocket) {
-	char* msg = (char*) package_deserialize(serverSocket, true);
+	char* msg = (char*) stream_deserialize(serverSocket, true);
 	printf("%s", msg);
 	free(msg);
 }
@@ -84,8 +84,8 @@ void send_room_info(int serverSocket) {
 }
 
 void send_serialized_package(int serverSocket, t_buffer* buffer, op_code opCode, char* str) {
-	void* toSend = package_serialize(opCode, buffer);
-	package_send(serverSocket, toSend, buffer->size);
+	void* toSend = stream_serialize(opCode, buffer);
+	stream_send(serverSocket, toSend, buffer->size);
 	free_sended_info(buffer, toSend, str);
 }
 

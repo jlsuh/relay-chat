@@ -55,7 +55,7 @@ void* suscription_handler(void* socket) {
 
 void handle_chat_room(t_user* user) {
 	string_send(user->socket, "[Room-to-join  RoomID]: ");
-	t_chat_room* newChatRoom = (t_chat_room*) package_deserialize(user->socket, true);
+	t_chat_room* newChatRoom = (t_chat_room*) stream_deserialize(user->socket, true);
 	t_chat_room* existentRoom = find_room(newChatRoom->roomID);
 	t_chat_room* current = NULL;
 	char* msg;
@@ -114,7 +114,7 @@ void handle_chat_room(t_user* user) {
 
 void lead_chat_room(t_user* user) {
 	do {
-		char* msg = (char*) package_deserialize(user->socket, true);
+		char* msg = (char*) stream_deserialize(user->socket, true);
 		if(strcmp(msg, "/exit") == 0) {
 			free(msg);
 			break;
@@ -161,7 +161,7 @@ int get_user_index(t_user* target) {
 
 t_user* recv_user_info(int userSocket) {
 	string_send(userSocket, "Input username: ");
-	char* userName = (char*) package_deserialize(userSocket, true);
+	char* userName = (char*) stream_deserialize(userSocket, true);
 
 	t_user* user = malloc(sizeof(t_user));
 	pthread_mutex_lock(&userIDLock);
