@@ -1,14 +1,18 @@
-all: clean
-	make -C shared
-	make -C server
-	make -C user
-	make -C tests
+PROJECTS=server user tests
+LIBS=static
+
+all: $(PROJECTS)
+
+$(PROJECTS): $(LIBS)
+	$(MAKE) -C $@ all
+
+$(LIBS):
+	$(MAKE) -C $@ all
 
 clean:
-	make clean -C shared
-	make clean -C server
-	make clean -C user
-	make clean -C tests
+	$(foreach P, $(LIBS) $(PROJECTS), $(MAKE) -C $P clean;)
 
-test: all
-	valgrind --leak-check=full ./tests/bin/tests.out
+release:
+	$(foreach P, $(LIBS) $(PROJECTS), $(MAKE) -C $P release;)
+
+.PHONY: all $(PROJECTS) $(LIBS) clean release
