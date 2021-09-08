@@ -18,7 +18,7 @@ typedef struct {
     t_chat_room* currentChatRoom;
 } t_user;
 
-void chat_room_destroy(void*);
-void user_destroy(void*);
+void chat_room_destroy(void* aChatRoom);
+void user_destroy(void* aUser);
 
 #endif

@@ -1,5 +1,7 @@
 #include "user.h"
 
+static bool deserializeNext = true;
+
 int main(int argc, char* argv[]) {
     t_config* config = config_create(USER_CONFIG);
     char* ip = config_get_string_value(config, USER_IP);
