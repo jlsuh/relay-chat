@@ -11,12 +11,12 @@ typedef struct {
 } t_buffer;
 
 t_buffer* buffer_create();
-void buffer_pack(t_buffer*, void*, int);
-void buffer_pack_string(t_buffer*, char*);
-void buffer_pack_chat_room(t_buffer*, uint32_t, char*);
-void buffer_unpack(t_buffer*, void*, int);
-t_chat_room* buffer_unpack_chat_room(t_buffer*);
-char* buffer_unpack_string(t_buffer*);
-void buffer_destroy(t_buffer*);
+void buffer_destroy(t_buffer* buffer);
+void buffer_pack(t_buffer* buffer, void* streamToAdd, int size);
+void buffer_unpack(t_buffer* buffer, void* dest, int size);
+void buffer_pack_string(t_buffer* buffer, char* stringToAdd);
+char* buffer_unpack_string(t_buffer* buffer);
+void buffer_pack_chat_room(t_buffer* buffer, uint32_t roomID, char* roomName);
+t_chat_room* buffer_unpack_chat_room(t_buffer* buffer);
 
 #endif

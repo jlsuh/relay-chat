@@ -1,5 +1,18 @@
 #include "server.h"
 
+static pthread_t threads[FD_SETSIZE];
+static pthread_mutex_t userIDLock;
+static pthread_mutex_t roomIDLock;
+
+static t_list* rooms;
+static pthread_mutex_t roomsLock;
+static pthread_mutex_t usersLock;
+static pthread_mutex_t existentUsersLock;
+
+static int tid = 0;
+static uint32_t userID = 0;
+static uint32_t roomID = 0;
+
 int main(int argc, char* argv[]) {
     t_config* config = config_create(SERVER_CONFIG);
     char* ip = config_get_string_value(config, SERVER_IP);

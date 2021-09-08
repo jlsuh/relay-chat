@@ -14,9 +14,9 @@ typedef enum {
     STRING, ROOMINFO,
 } op_code;
 
-void string_send(int, char*);
-void stream_send(int, void*, uint32_t);
-void* stream_serialize(uint8_t, t_buffer*);
-void* stream_deserialize(int, bool);
+void string_send(int socket, char* str);
+void stream_send(int userSocket, void* toSend, uint32_t bufferSize);
+void* stream_serialize(uint8_t opCode, t_buffer* buffer);
+void* stream_deserialize(int serverSocket, bool deserializeNext);
 
 #endif

@@ -9,16 +9,14 @@
 #define USER_PORT "PORT"
 #define MAX_USERNAME_LENGTH 32
 
-void start_chatting(int);
-void recv_distributed_msg(void*);
-void display_deserialized_msg(int);
-void send_user_info(int);
-void send_room_info(int);
-void send_serialized_package(int, t_buffer*, op_code, char*);
-void exchange_info(int, void(*info_sender)(int));
-void free_sended_info(t_buffer*, void*, char*);
-int connect_to_server(char*, char*);
-
-static bool deserializeNext = true;
+void start_chatting(int serverSocket);
+void recv_distributed_msg(void* socket);
+void display_deserialized_msg(int serverSocket);
+void send_user_info(int serverSocket);
+void send_room_info(int serverSocket);
+void send_serialized_package(int serverSocket, t_buffer* buffer, op_code opCode, char* str);
+void exchange_info(int serverSocket, void(*info_sender)(int));
+void free_sended_info(t_buffer* buffer, void* toSend, char* str);
+int connect_to_server(char* ip, char* port);
 
 #endif
